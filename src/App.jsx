@@ -1,4 +1,5 @@
 import { BrowserRouter , Route, Routes } from 'react-router-dom';
+import React from 'react'
 import Landing from './Pages/Landing';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
@@ -16,10 +17,12 @@ import Reviews from './Pages/Reviews';
 import PayGateWay from './Pages/PayGateWay';
 import AdminRegister from './Pages/AdminRegister';
 import BookAccomodation from './Pages/BookAccomodation';
+import Navigation from './Components/Navigation'
 
 function App() {
   return (
 <BrowserRouter>
+<Navigation />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
