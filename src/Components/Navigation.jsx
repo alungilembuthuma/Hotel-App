@@ -1,23 +1,64 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import { NavLink } from 'react-router-dom';
+import Logo from '../assets/logo.svg'; 
 
 const Navbar = () => {
   return (
-    <nav className="navbar">
+    <nav className="navbar" style={{ 
+      backgroundColor: "#E74C32", 
+      display: "flex", 
+      padding: "10px 20px",
+      position: "fixed",  // Fixed position
+      top: 0,  // Stick it to the top
+      width: "100%",  // Ensure it spans the full width of the screen
+      zIndex: 1000  // Ensure it stays above other content
+    }}>
       <div className="navbar-logo">
-        <Link to="/">HotelApp</Link>
+        <img src={Logo} alt="HotelApp Logo" style={{ width: "100px", height: "auto" }} />
       </div>
-      <ul className="navbar-links">
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/accommodations">Accommodations</Link></li>
-        <li><Link to="/favorites">Favorites</Link></li>
-        <li><Link to="/user-profile">Profile</Link></li>
-        <li><Link to="/login">Login</Link></li>
-        <li><Link to="/register">Sign Up</Link></li>
+      <ul className="navbar-links" style={{ display: "flex", alignItems: "center", marginLeft: "55%",  }}>
+        <NavLink
+          to="/accommodations"
+          style={({ isActive }) => ({
+            color: "#2B1716",
+            marginLeft: "2rem",
+            fontFamily: "sans-serif",
+            fontWeight: "bold",
+            fontSize: "20px",
+            textDecoration: isActive ? "underline" : "none",
+          })}
+        >
+          Accommodations
+        </NavLink>
+        <NavLink
+          to="/login"
+          style={({ isActive }) => ({
+            color: "#2B1716",
+            marginLeft: "2rem",
+            fontFamily: "sans-serif",
+            fontWeight: "bold",
+            fontSize: "20px",
+            textDecoration: isActive ? "underline" : "none",
+          })}
+        >
+          Login
+        </NavLink>
+        <NavLink
+          to="/register"
+          style={({ isActive }) => ({
+            color: "#2B1716",
+            marginLeft: "2rem",
+            fontFamily: "sans-serif",
+            fontWeight: "bold",
+            fontSize: "20px",
+            textDecoration: isActive ? "underline" : "none",
+          })}
+        >
+          Register
+        </NavLink>
       </ul>
     </nav>
   );
-}
+};
 
 export default Navbar;
