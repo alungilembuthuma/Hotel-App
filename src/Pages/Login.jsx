@@ -3,19 +3,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/authSlice";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [errorMessage, setErrorMessage] = useState("");
+  // const dispatch = useDispatch();
+  // const { loading, error } = useSelector((state) => state.auth);
 
-  const handleLogin = () => {
-    dispatch(loginUser({ email, password }));
-  };
+  // const handleLogin = () => {
+  //   if (!email || !password) {
+  //     setErrorMessage("Please fill out both fields.");
+  //     return;
+  //   }
+
+  //   setErrorMessage(""); // Clear previous error message
+  //   dispatch(loginUser({ email, password }));
+  // };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <input
+    <div style={{backgroundColor:"Pink"}}>
+     
+      {/* <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -30,7 +37,8 @@ const Login = () => {
       <button onClick={handleLogin} disabled={loading}>
         {loading ? "Logging in..." : "Login"}
       </button>
-      {error && <p>{error}</p>}
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>} */}
     </div>
   );
 };

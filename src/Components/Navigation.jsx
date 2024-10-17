@@ -1,11 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../assets/logo.svg'; 
+import New from  '../assets/new logo.svg'
 
 const Navbar = () => {
   return (
     <nav className="navbar" style={{ 
-      backgroundColor: "#E74C32", 
+      backgroundColor: "#daa265", 
       display: "flex", 
       padding: "10px 20px",
       position: "fixed",  // Fixed position
@@ -14,7 +15,7 @@ const Navbar = () => {
       zIndex: 1000  // Ensure it stays above other content
     }}>
       <div className="navbar-logo">
-        <img src={Logo} alt="HotelApp Logo" style={{ width: "100px", height: "auto" }} />
+        <img src={New} alt="HotelApp Logo" style={{ width: "100px", height: "auto" }} />
       </div>
       <ul className="navbar-links" style={{ display: "flex", alignItems: "center", marginLeft: "55%",  }}>
         <NavLink

@@ -19,7 +19,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* My Sephora */}
+      
         <div>
           <h3 style={{ fontSize: '14px', marginBottom: '10px' }}>Minaty.com</h3>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -31,7 +31,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Help & FAQs */}
         <div>
           <h3 style={{ fontSize: '14px', marginBottom: '10px' }}>Help & FAQs</h3>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -43,7 +42,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Ways to Shop */}
         <div>
           <h3 style={{ fontSize: '14px', marginBottom: '10px' }}>Ways to Book</h3>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -57,7 +55,6 @@ const Footer = () => {
 
       </div>
 
-      {/* Newsletter Signup & Social Links */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 0', borderTop: '1px solid #333', maxWidth: '1200px', margin: '0 auto' }}>
         <div>
           <form style={{ display: 'flex', alignItems: 'center' }}>
@@ -91,7 +88,7 @@ const Footer = () => {
   );
 };
 
-// Styles for various elements
+
 const linkStyle = {
   color: '#fff',
   textDecoration: 'none',
