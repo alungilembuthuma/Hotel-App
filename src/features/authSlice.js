@@ -1,70 +1,88 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { auth } from "../firebase"; 
+import { auth, db } from "../firebase"; 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore"; 
 
-// Thunks for async Firebase actions
-export const signupUser = createAsyncThunk(
+export const registerUser = createAsyncThunk(
   "auth/signupUser",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, role }, { rejectWithValue }) => {
     try {
+     
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      return userCredential.user;
+      const user = userCredential.user;
+
+      
+      const collection = role === 'Admin' ? 'admins' : 'users';
+
+      
+      await setDoc(doc(db, collection, user.uid), {
+        email: user.email,
+        role: role,
+        createdAt: new Date() // Optional: Store the date user was created
+      });
+
+      return { user, role }; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-
-export const registerUser = createAsyncThunk(
-    'auth/registerUser',
-    async ({ name, email, password }, { rejectWithValue }) => {
-      try {
-        const response = await axios.post('/api/register', { name, email, password });
-        return response.data;
-      } catch (error) {
-        return rejectWithValue(error.response.data);
-      }
-    }
-  );
-  
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
     try {
+    
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      return userCredential.user;
+      const user = userCredential.user;
+
+      
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const adminDoc = await getDoc(doc(db, "admins", user.uid));
+
+      let role = null;
+
+      if (adminDoc.exists()) {
+        role = 'Admin';
+      } else if (userDoc.exists()) {
+        role = 'User';
+      }
+
+      return { user, role }; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Slice to handle login/signup state
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
+    role: null,
     loading: false,
     error: null,
   },
   reducers: {
     logout: (state) => {
       state.user = null;
+      state.role = null; 
       state.error = null;
     },
   },
   extraReducers: (builder) => {
-    // Handle signup cases
-    builder.addCase(signupUser.pending, (state) => {
+
+    builder.addCase(registerUser.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(signupUser.fulfilled, (state, action) => {
+    builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.user = action.payload.user;
+      state.role = action.payload.role; 
     });
-    builder.addCase(signupUser.rejected, (state, action) => {
+    builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
@@ -76,7 +94,8 @@ const authSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.user = action.payload.user;
+      state.role = action.payload.role; 
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;

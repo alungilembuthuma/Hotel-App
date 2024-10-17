@@ -1,9 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"; // Import Firestore
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpzYj712F0uNwZrQWuMXPa4emWhPpTsfU",
   authDomain: "hotel-app-7f859.firebaseapp.com",
+  databaseURL: "https://hotel-app-7f859-default-rtdb.firebaseio.com/",
   projectId: "hotel-app-7f859",
   storageBucket: "hotel-app-7f859.appspot.com",
   messagingSenderId: "965768852220",
@@ -11,5 +13,13 @@ const firebaseConfig = {
   measurementId: "G-R9929RDGVM"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+
+// Initialize Firebase Authentication
+const auth = getAuth(app);
+
+// Initialize Firestore
+const db = getFirestore(app); // Change to Firestore
+
+export { auth, db }; // Export auth and db

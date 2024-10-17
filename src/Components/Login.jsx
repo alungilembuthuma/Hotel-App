@@ -1,25 +1,46 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; // Navigate to different routes after login
 import { loginUser } from '../features/authSlice'; 
 import Footer from '../Components/Footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('user'); // Default role is 'user'
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const handleLogin = () => {
-    dispatch(loginUser({ email, password }));
+    dispatch(loginUser({ email, password, role })).then((response) => {
+      if (response.payload) {
+        if (role === 'admin') {
+          navigate('/admin/dashboard'); // Navigate to admin dashboard if logged in as Admin
+        } else {
+          navigate('/user-profile'); // Navigate to user profile if logged in as User
+        }
+      }
+    });
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Login Page</h1>
+      <h1 style={styles.title}>Login</h1>
 
-      <label style={styles.label}>
-        Email:
-      </label>
+     
+      <label style={styles.label}>Login as:</label>
+      <select
+        value={role}
+        onChange={(e) => setRole(e.target.value)}
+        style={styles.select}
+      >
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      {/* Email Input */}
+      <label style={styles.label}>Email:</label>
       <input
         type="email"
         value={email}
@@ -28,9 +49,8 @@ const Login = () => {
         style={styles.input}
       />
 
-      <label style={styles.label}>
-        Password:
-      </label>
+      {/* Password Input */}
+      <label style={styles.label}>Password:</label>
       <input
         type="password"
         value={password}
@@ -39,72 +59,74 @@ const Login = () => {
         style={styles.input}
       />
 
+      {/* Submit Button */}
       <button 
         onClick={handleLogin} 
         disabled={loading} 
         style={styles.button}
       >
-        {loading ? "Logging in..." : "Login"}
+        {loading ? 'Logging in...' : 'Login'}
       </button>
 
+      {/* Display error if there's a login issue */}
       {error && <p style={styles.error}>{error}</p>}
-
-      <div style={styles.footerContainer}>
-        <Footer />
-      </div>
+<div style={{width:"110%",marginTop:"5%"}}>
+     <Footer /></div>
+     
     </div>
   );
 };
 
+// Styles for the component
 const styles = {
   container: {
-    backgroundColor: '#fbf7ff',
+    backgroundColor: '#f9f9f9',
     width: '100%',
-    height: '100vh',
+    height: '150vh',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
-    color: '#2b1716',
-    fontFamily: 'sans-serif',
-    fontSize: '45px',
+    color: '#333',
+    fontSize: '40px',
     marginBottom: '20px',
   },
   label: {
-    fontSize: '25px',
-    color: '#2b1716',
-    fontFamily: 'sans-serif',
+    fontSize: '18px',
     marginBottom: '10px',
+    color: '#333',
+  },
+  select: {
+    width: '30%',
+    padding: '10px',
+    marginBottom: '20px',
+    fontSize: '16px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
   },
   input: {
-    width: '35%',
-    height: '30px',
-    marginBottom: '20px',
+    width: '30%',
     padding: '10px',
-    fontSize: '18px',
+    marginBottom: '20px',
+    fontSize: '16px',
     borderRadius: '5px',
     border: '1px solid #ccc',
   },
   button: {
-    width: '15%',
-    height: '40px',
+    width: '30%',
+    padding: '10px',
     backgroundColor: '#daa265',
     color: '#fff',
-    fontSize: '18px',
-    border: 'none',
+    fontSize: '16px',
     borderRadius: '5px',
+    border: 'none',
     cursor: 'pointer',
-    marginTop: '20px',
   },
   error: {
     color: 'red',
     marginTop: '20px',
-  },
-  footerContainer: {
-    marginTop: '50px',
-    width: '100%',
   },
 };
 
