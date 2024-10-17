@@ -3,22 +3,21 @@ import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore"; 
 
+// Thunk for registering a user
 export const registerUser = createAsyncThunk(
   "auth/signupUser",
   async ({ email, password, role }, { rejectWithValue }) => {
     try {
-     
+      // Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const user = userCredential.user; 
 
-      
+      // Determine the collection based on the role
       const collection = role === 'Admin' ? 'admins' : 'users';
-
-      
       await setDoc(doc(db, collection, user.uid), {
         email: user.email,
         role: role,
-        createdAt: new Date() // Optional: Store the date user was created
+        createdAt: new Date() // Store the date user was created
       });
 
       return { user, role }; 
@@ -28,34 +27,36 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+// Thunk for logging in a user
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-    
+      // Sign in the user with Firebase Authentication
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      const adminDoc = await getDoc(doc(db, "admins", user.uid));
+      // Check if the user exists in Firestore
+      const userDocRef = doc(db, "users", user.uid); // Assuming "users" collection
+      const userDoc = await getDoc(userDocRef);
 
-      let role = null;
-
-      if (adminDoc.exists()) {
-        role = 'Admin';
-      } else if (userDoc.exists()) {
-        role = 'User';
+      // If the user does not exist, reject the login
+      if (!userDoc.exists()) {
+        throw new Error("User does not exist in the database.");
       }
 
-      return { user, role }; 
+      // Get the role from Firestore
+      const userData = userDoc.data();
+      const role = userData.role || "User"; // Default role if not defined
+
+      return { user, role }; // Return user data and role from Firestore
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-
+// Create a slice for auth
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -72,7 +73,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-
+    // Handle register actions
     builder.addCase(registerUser.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -87,7 +88,7 @@ const authSlice = createSlice({
       state.error = action.payload;
     });
 
-    // Handle login cases
+    // Handle login actions
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -104,5 +105,6 @@ const authSlice = createSlice({
   },
 });
 
+// Export actions and reducer
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;

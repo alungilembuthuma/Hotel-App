@@ -1,13 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Logo from '../assets/logo.svg'; 
-import New from  '../assets/new logo.svg'
-import Login from '../Components/Login'
+import Logo from '../assets/684ad1ec-6640-45ae-ae5a-326285e571a4.svg'
 
 const Navbar = () => {
   return (
     <nav className="navbar" style={{ 
-      backgroundColor: "#daa265", 
+      backgroundColor: "#EDD1A7", 
       display: "flex", 
       padding: "10px 20px",
       position: "fixed",  // Fixed position
@@ -15,8 +13,8 @@ const Navbar = () => {
       width: "100%",  // Ensure it spans the full width of the screen
       zIndex: 1000  // Ensure it stays above other content
     }}>
-      <div className="navbar-logo">
-        <img src={New} alt="HotelApp Logo" style={{ width: "100px", height: "auto" }} />
+      <div className="navbar-logo" >
+        <img src={Logo} alt="HotelApp Logo" style={{ width: "100px", height: "auto" }} />
       </div>
       <ul className="navbar-links" style={{ display: "flex", alignItems: "center", marginLeft: "55%",  }}>
         <NavLink

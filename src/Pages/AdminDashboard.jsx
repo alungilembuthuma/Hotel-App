@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom"; // Import Link from React Router
 import { db } from "../firebase"; // Assuming you have firebase initialized
 import { ref, onValue } from "firebase/database"; // Use Firebase Realtime Database
+import { IoMdMenu } from "react-icons/io";
+import { TfiFaceSad } from "react-icons/tfi";
+import Footer from '../Components/Footer';
 
 const AdminDashboard = () => {
   const [profilePic, setProfilePic] = useState(null);
   const [accommodations, setAccommodations] = useState([]);
   const [adminName, setAdminName] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default state is closed
   const { user } = useSelector((state) => state.auth); // Get user info from Redux
 
   useEffect(() => {
-    // Fetch admin name and accommodations
     if (user) {
       setAdminName(user.email); // Assuming email is the identifier
       const accommodationsRef = ref(db, `accommodations/${user.uid}`);
@@ -29,40 +33,53 @@ const AdminDashboard = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfilePic(reader.result); // Preview image
-        // Optionally: Upload to Firebase Storage and save URL in DB
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev); 
+  };
+
   return (
-    <div style={{ display: "flex" }}>
-      <Sidebar />
-      <div style={{ marginLeft: "250px", padding: "20px", flexGrow: 1 }}>
-        <h1>Admin Dashboard</h1>
-        <h1>Welcome, {adminName}</h1>
-        <div>
-          <h2>Profile Picture</h2>
-          <input type="file" onChange={handleProfilePicChange} />
-          {profilePic && (
-            <img
-              src={profilePic}
-              alt="Profile Preview"
-              style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-            />
-          )}
+    <div style={{ marginTop: "8%" }}>
+      {/* Sidebar */}
+      {isSidebarOpen && <Sidebar />}
+
+      <div
+        style={{
+          marginLeft: isSidebarOpen ? "250px" : "10px", 
+          transition: "margin-left 0.3s ease", 
+          padding: "20px",
+          flexGrow: 1,
+          position: "relative", 
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        <button onClick={toggleSidebar} style={{ margin: "10px", border: "none", background: "none" }}>
+          <IoMdMenu size={24} /> {/* Icon size adjusted */}
+        </button>
+        <div style={{ marginLeft: "10%" }}>
+          <h1 style={{ fontSize: "70px", marginLeft: "25%" }}>Welcome, {adminName}</h1>
+          <div>
+            {/* Optionally: Profile picture code */}
+          </div>
+          <h2 style={{ marginLeft: "35%", marginTop: "5%" }}>Your Accommodations</h2>
+          <ul>
+            {accommodations.length > 0 ? (
+              accommodations.map((acc, index) => (
+                <li key={index}>{acc.name}</li> // Assuming `name` is a field in accommodations
+              ))
+            ) : (
+              <div style={{ marginLeft: "41%" }}>
+                <TfiFaceSad />
+              </div>
+            )}
+          </ul>
         </div>
-        <h2>Your Accommodations</h2>
-        <ul>
-          {accommodations.length > 0 ? (
-            accommodations.map((acc, index) => (
-              <li key={index}>{acc.name}</li> // Assuming `name` is a field in accommodations
-            ))
-          ) : (
-            <p>No accommodations found.</p>
-          )}
-        </ul>
       </div>
+      <Footer />
     </div>
   );
 };
@@ -74,18 +91,39 @@ const Sidebar = () => {
         width: "250px",
         background: "#f4f4f4",
         padding: "20px",
-        position: "fixed",
-        height: "100vh",
+        position: "absolute", // Changed to absolute
+        height: "120vh",
+        zIndex: 1000, // Ensure sidebar is above other elements
       }}
     >
       <h2>Admin Menu</h2>
-      <ul>
-        <li>Add Accommodation</li>
-        <li>See Bookings</li>
-        <li>See Reviews</li>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+        <li>
+          <Link to="/admin/profile" style={styles.link}>Admin Profile</Link>
+        </li>
+        <li>
+          <Link to="/admin/accommodations/new" style={styles.link}>Add Accommodation</Link>
+        </li>
+        <li>
+          <Link to="/admin/bookings" style={styles.link}>See Bookings</Link>
+        </li>
+        <li>
+          <Link to="/admin/reviews" style={styles.link}>See Reviews</Link>
+        </li>
       </ul>
     </div>
   );
+};
+
+const styles = {
+  link: {
+    textDecoration: 'none',
+    color: '#333',
+    fontSize: '18px',
+    padding: '10px 0',
+    display: 'block',
+    transition: 'color 0.3s ease',
+  },
 };
 
 export default AdminDashboard;

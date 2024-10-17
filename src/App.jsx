@@ -17,6 +17,7 @@ import BookAccomodation from './Pages/BookAccomodation';
 import Navigation from './Components/Navigation';
 import Login from './Components/Login'; 
 import Register from './Components/Register'; 
+import AdminProfile from './Pages/AdminProfile'
 function App() {
   return (
     <BrowserRouter>
@@ -38,6 +39,7 @@ function App() {
         <Route path="/pay-gateway" element={<PayGateWay />} />
         <Route path="/adminregister" element={<AdminRegister />} />
         <Route path="/BookAccomodation" element={<BookAccomodation />} />
+        <Route path="/admin/profile" element={<AdminProfile />} />
       </Routes>
     </BrowserRouter>
   );
