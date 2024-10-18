@@ -5,7 +5,7 @@ import accommodationReducer from './features/authSlice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    accommodation: accommodationReducer,
+    accommodation: accommodationReducer, 
   },
 });
 
