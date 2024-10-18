@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Navigate to different routes after login
-import { loginUser } from '../features/authSlice'; 
+import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../features/authSlice';
 import Footer from '../Components/Footer';
 
 const Login = () => {
@@ -16,9 +16,9 @@ const Login = () => {
     dispatch(loginUser({ email, password, role })).then((response) => {
       if (response.payload) {
         if (role === 'admin') {
-          navigate('/admin/dashboard'); // Navigate to admin dashboard if logged in as Admin
+          navigate('/admin/dashboard'); 
         } else {
-          navigate('/user-profile'); // Navigate to user profile if logged in as User
+          navigate('/user-profile'); 
         }
       }
     });
@@ -28,7 +28,6 @@ const Login = () => {
     <div style={styles.container}>
       <h1 style={styles.title}>Login</h1>
 
-     
       <label style={styles.label}>Login as:</label>
       <select
         value={role}
@@ -70,9 +69,10 @@ const Login = () => {
 
       {/* Display error if there's a login issue */}
       {error && <p style={styles.error}>{error}</p>}
-<div style={{width:"110%",marginTop:"5%"}}>
-     <Footer /></div>
-     
+
+      <div style={{ width: '110%', marginTop: '5%' }}>
+        <Footer />
+      </div>
     </div>
   );
 };
