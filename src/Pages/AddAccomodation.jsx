@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addAccommodation } from '../AccommodationSlice'
+import { addAccommodation } from '../features/AccommodationSlice'
 
 const AddAccommodation = () => {
   const [name, setName] = useState('');

@@ -17,7 +17,8 @@ import BookAccomodation from './Pages/BookAccomodation';
 import Navigation from './Components/Navigation';
 import Login from './Components/Login'; 
 import Register from './Components/Register'; 
-import AdminProfile from './Pages/AdminProfile'
+import AdminProfile from './Pages/AdminProfile';
+import SettingsPage from './Pages/SettingsPage';
 function App() {
   return (
     <BrowserRouter>
@@ -40,6 +41,7 @@ function App() {
         <Route path="/adminregister" element={<AdminRegister />} />
         <Route path="/BookAccomodation" element={<BookAccomodation />} />
         <Route path="/admin/profile" element={<AdminProfile />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </BrowserRouter>
   );
